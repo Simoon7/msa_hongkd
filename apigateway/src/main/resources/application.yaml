@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: apigateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: member-service
+              uri: lb://member-service
+              predicates:
+                - Path=/member-service/**
+              filters:
+                - StripPrefix=1
+            - id: product-service
+              uri: lb://product-service
+              predicates:
+                - Path=/product-service/**
+              filters:
+                - StripPrefix=1
+            - id: cart-service
+              uri: lb://cart-service
+              predicates:
+                - Path=/cart-service/**
+              filters:
+                - StripPrefix=1
+            - id: ordering-service
+              uri: lb://ordering-service
+              predicates:
+                - Path=/ordering-service/**
+              filters:
+                - StripPrefix=1
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "http://localhost:3000"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+jwt:
+  secretKey: 3xIowMMEk1+XTK0Od3N0q5sReRxFN4NcAh0YcnWPPH1qi0I2ZkiNevHCMzqIoc/4dTQew6WmrcCKkd1mkVEPJQ==
